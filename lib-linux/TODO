@@ -1,0 +1,3 @@
+BUG: TCP突然断掉后，程序会崩溃 socket_send 应该会发送失败，后续的session会无效，但没有机制清除这种session。
+BUG Fixed: serialport必须先关闭，再析构子类函数，否则serialport里的线程仍然能访问子类变量导致死锁。
+BUG Fixed: Condition Wait函数里的pthread_cond_timedwait是依赖实时时间，如果改变时间会影响wait，现在改进采用相对时间，杜绝有可能的等待时间超出预期BUG。
