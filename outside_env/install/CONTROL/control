@@ -1,0 +1,8 @@
+Package: outside
+Priority: optional
+Section: applications 
+Version: 0.1.8
+Architecture: ar71xx
+Maintainer: zlb zlb@lierda.com
+Depends: 
+Description: outside env check

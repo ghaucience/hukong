@@ -1,0 +1,33 @@
+// current version: 0.0.2
+
+// 获取室外环境参数设置
+// @param
+//    无
+// @return
+//    struct env_info
+//    {
+//      double PM03;         // PM0.3
+//      double PM25;         // PM2.5
+//      double PM10;         // PM10
+//      double jiaquang;     // 甲醛浓度
+//      double CO2;          // CO2
+//      double temp;         // 温度
+//      double wet;          // 湿度 百分比：如 1 表示1%
+//
+//      int season;          // 0夏季 1冬季
+//      int bEastsun;        // 东边阳光信号
+//      int bSouthsun;       // 南边阳光信号
+//      int bWetsun;         // 西边阳光信号
+//      int bSunsen1Fault;   // 1号阳光信号处理器故障
+//      int bSunsen2Fault;   // 2号阳光信号处理器故障
+//      int bSunsen3Fault;   // 3号阳光信号处理器故障
+//      int bDustsenFault;   // 室外粉尘传感器故障
+//      int bWetsenFault;    // 室外湿度传感器故障
+//      int bTempsenFault;   // 室外温度传感器故障
+//    }
+//
+
+struct env_info query_env();
+
+// 主动上传格式
+PM0.3, PM2.5, PM10, 甲醛浓度, 二氧化碳浓度, 温度, 湿度(如1表示1%), 季节(0-夏季 1-冬季), 东边阳光信号(0无1有), 南边阳光信号(0无1有), 西边阳光信号(0无1有), 1号阳光信号处理器故障(0无1有), 2号阳光信号处理器故障(0无1有), 3号阳光信号处理器故障(0无1有), 室外粉尘传感器故障(0无1有), 室外湿度传感器故障(0无1有), 室外温度传感器故障(0无1有)

@@ -1,0 +1,163 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import xmlrpclib  
+import time
+
+#server = xmlrpclib.ServerProxy("http://192.168.2.100:8000/RPC2")
+#server = xmlrpclib.ServerProxy("http://192.168.0.202:8000/RPC2")
+#server = xmlrpclib.ServerProxy("http://192.168.1.200:8000/RPC2")
+server = xmlrpclib.ServerProxy("http://192.168.1.201:8000/RPC2")
+
+print server.get_device_count()
+#server.set_device_count(2, 1, 1, 0)
+#print server.get_device_count()
+
+#print server.query_light_switch(1)
+#print server.query_light_switch(2)
+#print server.protocol_version_is_ok(0, 0, 0)
+#print server.query_meter(1)
+print server.query_curtain(1)
+
+#server.light_switch(1, 0, 0)
+#server.light_switch(2, 0, 0)
+
+#server.inner_curtain(1, 0)
+#server.inner_curtain(1, 1)
+#server.outside_curtain(1, 0)
+#server.outside_curtain(1, 0)
+
+#server.light_switch(1, 0, 0)
+#server.light_switch(2, 0, 0)
+#server.inner_curtain(1, 0)
+#server.light_switch(1, 2, 1)
+#server.light_switch(1, 6, 1)
+#print server.query_light_switch(1)
+#while True:
+#    server.inner_curtain(1, 1)
+#    print server.query_curtain(1)
+#
+#    server.light_switch(1, 0, 1)
+#    print server.query_light_switch(1)
+#    time.sleep(4)
+#    server.light_switch(1, 0, 0)
+#    print server.query_light_switch(1)
+#    time.sleep(1)
+#    #print server.query_meter(1)
+#    time.sleep(60)
+#    print server.query_curtain(1)
+
+#print server.query_meter(1)
+#print server.query_light_switch(1)
+
+#print server.query_light_switch(2)
+#print server.get_sen_status()
+#print "humanse 1", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(1)]
+#print "humanse 2", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(2)]
+#print "humanse 3", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(3)]
+#print "humanse 4", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(4)]
+#print "humanse 5", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(5)]
+#print "humanse 6", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(6)]
+#print "humanse 7", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(7)]
+#print "humanse 8", [(id>>16, (id>>8)%0x100, id%0x100) for id in server.humansen_to_dev(8)]
+#print server.get_device_count()
+#print server.get_floor_room()
+#print "light off time",server.get_light_off_time(),"second"
+#print server.get_xinfeng_time()
+#print server.get_xinfeng_switch_status(1)
+
+#for i in range(1, 5):
+#    try:
+#        server.inner_curtain(i, 0)
+#        print "窗帘%d"%i
+#    except:
+#        pass
+#
+#for i in range(1, 5):
+#    try:
+#        server.light_switch(i, 0, 0)
+#        print "灯%d"%i
+#    except:
+#        pass
+#
+
+#for i in range(1, 10):
+#    try:
+#        server.query_curtain(i)
+#        print "窗帘%d"%i
+#    except:
+#        pass
+#
+#for i in range(1, 10):
+#    try:
+#        server.query_light_switch(i)
+#        print "灯%d"%i
+#    except:
+#        pass
+
+#server.light_switch(1,0,1)
+#server.light_switch(1, 0, 0)
+#print server.query_light_switch(1)
+#server.inner_curtain(1, 0)
+#print server.query_curtain(1)
+#print server.query_meter(1)
+#server.light_switch(1,0,1)
+#print server.query_aircondition(1)
+#print server.get_air_quality()
+#print server.get_xinfeng_windspeed()
+#print server.get_timesyn_internet()
+#print server.set_timesyn_internet(1)
+#print server.get_timesyn_internet()
+
+#server.aircondition(2, 1, 0, 3, 20, 1)
+#print server.get_xinfeng_switch_status(2)
+
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 20, 2)
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 21, 2)
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 22, 2)
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 23, 2)
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 24, 2)
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 25, 2)
+#print server.query_aircondition(1)
+#server.aircondition(1, 1, 0, 2, 26, 2)
+#print server.query_aircondition(1)
+
+#print server.query_inner_alarm()
+#print server.query_outside_alarm()
+
+#server.set_xinfeng_timectrl(24, 40)
+#print server.query_xinfeng_timectrl()
+#server.set_curtain_offtime(1)
+
+#print server.get_xinfeng_windspeed()
+
+#print server.set_time(2014, 5, 29, 14, 44, 33)
+
+#server.aircondition_svm(1, 1, 0, 3, 20, 1)
+#server.aircondition(1, 1, 0, 3, 20, 1)
+
+#server.set_outside_env([1.0, 2.0, 3.0, 34.0, 0.5, 22.0])
+#server.set_outside_sen([0,            1,1,1,  0,0,0,0,0,0])
+
+#server.inner_curtain(3, 1)
+#server.outside_curtain(3, 1)
+#print server.query_curtain_verbose(2)
+
+#print server.query_inner_alarm_new()
+
+#server.aircondition(1, 1, 0, 2, 28, 2)
+#
+#print server.query_aircondition(1)
+#server.aircondition_set_mode(1, 1)
+#print server.query_aircondition(1)
+#server.aircondition_set_mode(1, 0)
+#print server.query_aircondition(1)
+
+#server.set_fire_alarm(0)
+
+#print server.query_aircondition_verbose(2)

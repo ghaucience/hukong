@@ -1,0 +1,8 @@
+Package: xmlrpc-hukong
+Priority: optional
+Section: applications 
+Version: 1.9.34
+Architecture: ar71xx
+Maintainer: zlb zlb@lierda.com
+Depends: 
+Description: hukong device daemon for xmlrpc all and serve kongguangqi.

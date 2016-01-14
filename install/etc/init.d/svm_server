@@ -1,0 +1,13 @@
+#!/bin/sh /etc/rc.common
+
+START=201
+start() {
+    if [ -z `pidof svm` ] ;then
+        [ -e /usr/local/sedonaApp/svm ] && /usr/local/sedonaApp/svm /usr/local/sedonaApp/kits.scode /usr/local/sedonaApp/app.sab >/dev/null &
+    fi
+}
+
+stop()
+{
+    kill -9 `pidof svm` 2>/dev/null
+}

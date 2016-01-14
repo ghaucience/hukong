@@ -1,0 +1,335 @@
+// current version: 1.9.30
+// 2013-06-04: 修改 query_light_switch(int nDestAddr), 灯数量增加至6个，删除light_switch_status结构体多余到数据。
+// 2013-06-14: 修改 query_meter里面 meter_status结构体内从float改为double
+// 2013-06-20: 添加4个人感和灯光逻辑接口
+// 2013-06-27: 修改和添加户控器接口
+// 2013-06-28: 修改空调设置和查询接口参数名称，添加新风模式
+// 2013-07-02: v1.5.0 添加空气品质
+// 2013-09-03: v1.7.1 添加新风运行参数
+// 2013-09-14: v1.7.6 添加获得新风运行定时参数和获得新风阀和调风阀状态, 添加新风的节能模式参数
+// 2013-09-30: v1.8.8  get_air_quality inner_temp改double
+// 2013-10-09: v1.8.9 添加空调计量、电力天然气、卫生热水和自来水、价格接口
+// 2013-11-05: v1.8.14 添加新风风速函数get_xinfeng_windspeed
+// 2014-02-11: v1.9.3 添加室外环境参数设置 set_outside_env set_outside_sen
+// 2014-05-04: v1.9.11 添加节能模式RPC
+// 2014-05-06: v1.9.12 添加查询警报RPC
+// 2014-05-10: v1.9.14 室内警报查询添加漏水和漏气警报
+// 2014-05-10: v1.9.16 室内警报查询添加火警 新风阀故障 调风阀故障 排风阀故障
+// 2014-05-29: v1.9.19 添加时间同步
+// 2014-06-23: v1.9.24 添加设置新风空管截面积
+// 2014-07-03: v1.9.26 添加query_inner_alarm_new
+// 2014-07-16: v1.9.29 添加aircondition_set_mode
+// 2014-08-01: v1.9.30 添加set_fire_alarm  query_aircondition_verbose
+
+///////////////////////////////////////////////////////////////
+// 开关灯
+// @param
+//   nDestAddr  1 - 8  目标地址
+//   nIndex      0 - 6  灯序号（共6个灯），0表示所有灯
+//   mode        1/0 开/关
+void light_switch(int nDestAddr, int nIndex, int mode);
+
+struct light_switch_status
+{
+    // 灯状态
+    int light1_status;
+    int light2_status;
+    int light3_status;
+    int light4_status;
+    int light5_status;
+    int light6_status;
+};
+// 查询灯状态
+// @param
+//   nDestAddr  1 - 8  目标地址
+light_switch_status query_light_switch(int nDestAddr);
+
+
+///////////////////////////////////////////////////////////
+// 内窗帘开关
+// @param
+//   mode 0/1/2  关/开/停
+void inner_curtain(int nDestAddr, int mode);
+ 
+
+// 外窗帘开关
+// @param
+//   mode 0/1/2  关/开/停
+void outside_curtain(int nDestAddr, int mode);
+
+struct curtain_status
+{
+    // 0 - 全关
+    // 1 - 全开
+    // 2 - 半开
+    // 3 - 正开
+    // 4 - 正关
+    int inner; // 内窗帘状态  
+    int outside; // 外窗帘状态
+
+    // 0 - 无故障
+    // 1 - 有故障
+    int inner_fault; // 内窗帘故障
+    int outside_fault; // 外窗帘故障
+};
+// 窗帘状态查询
+// @param
+//   nDestAddr  1 - 8  目标地址
+curtain_status query_curtain(int nDestAddr);
+
+
+////////////////////////////////////////////////////////////
+struct meter_status { 
+    double cold_cur_rate; // 冷水瞬时流量                        0.0001m3/h
+    double hot_cur_rate; // 热水瞬时流量                         0.0001m3/h
+    double cold_totoal;  // 冷水累计流量                         0.01m3
+    double hot_totoal;   // 热水累计流量                         0.01m3
+    double hot_input_temp; // 热水入口温度                       0.01C
+    double hot_output_temp; // 热水出口温度                      0.01C
+    double hot_totoal_degree; // (热水累计热量）热水的总度数     0.01kWh
+    double hot_cur_power; // (热水瞬时热量） 热水的当前功率      0.01kW
+    double cur_totoal_power; // 瞬时总有功功率                   0.0001kW
+    double forward_totoal_degree; // (正向有功总电能) 正向总度数 0.01kWh
+    double gas_cur_rate; // 燃气当前流量                         0.0001m3/h
+    double gas_totoal_rate; // 燃气总流量                        1m3
+};
+// 抄表
+// @param
+//   nDestAddr  1 - 4  目标地址
+meter_status query_meter(int nDestAddr);
+
+////////////////////////////////////////////////////////////
+// 空调控制
+// switch_mode         1/0 开/关
+// aircondition_mode   0-制冷 1-制热
+// xinfeng_mode        1-纯新风 2-纯空调 3-新风+空调
+// temp                温度(5-35C)
+// energy_save_mode    空调节能模式 0--8小时关 1--1小时关 2--4小时关 3--24小时关 4-人离不关
+void aircondition(int nDestAddr, int switch_mode, int aircondition_mode, int xinfeng_mode, int temp, int energy_save_mode); 
+
+// 查询空调状态
+struct aircondition_status
+{
+    int switch_mode;       // 开关状态 1/0 开/关
+    int aircondition_mode; // 0-制冷 1-制热
+    int xinfeng_mode;      // 1-纯新风 2-纯空调 3-新风+空调
+    int temp_setting;      // 温度(5-35C)
+    int energy_save_mode;  // 空调节能模式 0--8小时关 1--1小时关 2--4小时关 3--24小时关 4-人离不关
+};
+aircondition_status query_aircondition(int nDestAddr);
+
+// 查询空调状态（带警报信息)
+struct aircondition_status
+{
+    int switch_mode;       // 开关状态 1/0 开/关
+    int aircondition_mode; // 0-制冷 1-制热
+    int xinfeng_mode;      // 1-纯新风 2-纯空调 3-新风+空调
+    int temp_setting;      // 温度(5-35C)
+    int energy_save_mode;  // 空调节能模式 0--8小时关 1--1小时关 2--4小时关 3--24小时关 4-人离不关
+
+    //(1有故障, 0无故障)
+    int xinfeng_alarm_1; // 火警
+    int xinfeng_alarm_2; // 新风阀故障 
+    int xinfeng_alarm_3; // 调风阀故障 
+    int xinfeng_alarm_4; // 排风阀故障 
+    int xinfeng_alarm_5; // 风量计故障 
+    int xinfeng_alarm_6; // 温度传感器故障 
+    int xinfeng_alarm_7; // 风量计通信故障 
+    int xinfeng_alarm_8; // 新风阀通信故障 
+    int xinfeng_alarm_9; // 调风阀通信故障 
+    int xinfeng_alarm_10;// 排风阀通信故障
+};
+aircondition_status query_aircondition_verbose(int nDestAddr);
+
+// 设置空调制冷制热模式
+// aircondition_mode   0-制冷 1-制热
+void aircondition_set_mode(int nDestAddr, int aircondition_mode);
+
+// 空气品质
+struct air_quality
+{
+    int inner_PM03;    // PM0.3  分辨率1ppm
+    int inner_PM25;    // PM2.5  分辨率1ppm
+    int inner_PM10;    // PM10   分辨率1ppm
+    double inner_VOC;  // 甲醛VOC浓度 分辨率0.01ppm
+    int inner_CO2;     // 二氧化碳浓度 分辨率1ppm
+    double inner_temp;    // 室内温度
+    int inner_humidity; // 室内湿度 1%
+};
+air_quality get_air_quality();
+
+////////////////////////////////////////////////////////
+// 查找人感ID对应的设备
+// @param
+//   nSenID  人感ID
+// @return
+//   int[]   每个数高16位到24位为设备类型，高8位到16位为485地址，低8位为可选参数（存放灯的序号）
+int[] humansen_to_dev(int nSenID);
+
+// 人感绑定到设备是否改变，如果改变再去调humansen_to_dev进行更新
+// @return
+//   bool    是否改变
+bool is_bind_change();
+
+// 返回人感状态
+// @return
+//   int[]  人感状态数组, 1-有人 0-无人
+//          人感ID对应数值索引+1，比如数组0对应1号人感
+int[] get_sen_status();
+
+// 返回检测到无人后到关灯时间
+// @return
+//   int    时间，单位是秒
+int get_light_off_time();
+
+// 获得设备的个数
+struct DevCount
+{
+    int type; // 设备类型
+    int count; // 设备个数
+
+    // 设备类型
+    // 灯光 = 0
+    // 窗帘 = 1
+    // 空调 = 2
+    // 抄表接口 = 3
+    // 人感 = 4
+};
+// @return
+//    DevCount[]  设备结构体数组
+DevCount[]  get_device_count();
+
+// 获得户控器地址信息
+struct FloorRoom
+{
+    int floor; // 楼层
+    int room; // 房间号
+};
+// @return
+//    FloorRoom  户控器到地址
+FloorRoom get_floor_room();
+
+// 获得新风运行定时参数
+struct XinfengTime
+{
+    int nOFF; //人离阀关时间 单位秒
+    int nON; //自动开阀时间 单位秒
+};
+XinfengTime get_xinfeng_time();
+
+// 获得新风阀和调风阀状态
+struct XinfengSwitchStatus
+{
+    int nXinfengSwitch; // 新风阀
+    int nTiaofengSwitch; // 调风阀
+};
+XinfengSwitchStatus get_xinfeng_switch_status(int nDestAddr);
+
+// 空调计量
+// @param
+//     calc[12]  (单位m3 ) 今天送风量、昨天送风量、本月送风量、上月送风量、今年送风量、去年送风量
+//               (单位kWh) 今天调温量、昨天调温量、本月调温量、上月调温量、今年调温量、去年调温量
+void set_calc_aircondition(double calc[12]);
+
+// 电力、天然气查询
+// @param
+//     calc[12]  (单位kWh) 今天耗电量、昨天耗电量、本月耗电量、上月耗电量、今年耗电量、去年耗电量
+//               (单位m3 ) 今天天然气消耗量、昨天天然气消耗量、本月天然气消耗量、上月天然气消耗量、今年天然气消耗量、去年天然气消耗量
+void set_calc_power_gas(double calc[12]);
+
+// 卫生热水、自来水查询
+// @param
+//     calc[12]  (单位kWh) 今天为什热水消耗量、昨天为什热水消耗量、本月为什热水消耗量、上月为什热水消耗量、今年为什热水消耗量、去年为什热水消耗量
+//               (单位m3 ) 今天自来水消耗量、昨天自来水消耗量、本月自来水消耗量、上月自来水消耗量、今年自来水消耗量、去年自来水消耗量
+void set_calc_water(double calc[12]);
+
+// 价格
+// @param
+//     price[6]  (单位元) 新风单价、调温单价、电力单价、天然气单价、卫生热水单价、自来水单价 
+void set_price(double price[6]);
+
+// 新风风速
+// @param
+//    无
+// @return
+//    struct xinfeng_windspeed
+//    {
+//        double windspeed; 风速 单位m/s
+//        double area;     风管截面积 单位m2
+//    }
+xinfeng_windspeed get_xinfeng_windspeed();
+
+// 设置新风空管截面积
+// @param
+//    新风空管截面积值，默认空管截面积值0.018
+// @return
+//    无
+void set_xinfeng_windarea(double area);
+
+// 室外环境参数设置
+// @param
+//     data[6]  室外颗粒物浓度(0.3um) 室外颗粒物浓度(2.5um) 室外颗粒物浓度(10um) 室外温度 室外湿度 室外CO2浓度(ppm)
+void set_outside_env(double data[6]);
+
+// 室外传感器参数
+// @param
+//     data[10] 季节(0夏季，1冬季) 东面阳光信号 南面阳光信号 西面阳信号 1#阳光信号处理器故障 2#阳光信号处理器故障 3#阳光信号处理器故障 室外粉尘传感器故障 室外湿度传感器故障 室外温度传感器故障(1有效,0无效)
+void set_outside_sen(int data[10]);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 节能模式RPC
+
+// 查询灯控节能模式
+// @return
+//    1-10分钟关, 2-2小时关
+int query_light_offtime();
+
+// 设置灯控节能模式
+// @param 
+//    index  1-10分钟关, 2-2小时关
+void set_light_offtime(int index);
+
+// 获得隔热帘节能模式
+// @return
+//    1-1小时关闭, 2-4小时关闭, 3-8小时关闭, 4-人离不关
+int query_curtain_offtime();
+
+// 设置隔热帘节能模式
+// @param
+//    index  1-1小时关闭, 2-4小时关闭, 3-8小时关闭, 4-人离不关
+void set_curtain_offtime(int index);
+
+// 获得粉尘间隔时间
+// @return
+//    1-每天检测1次, 2-每天检测2次, 3-每天检测4次, 4-手动启动检测
+int query_dust_time();
+
+// 设置粉尘间隔时间
+// @param
+//    index 1-每天检测1次, 2-每天检测2次, 3-每天检测4次, 4-手动启动检测
+void set_dust_time(int index);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 报警查询
+// 查询室内报警信息
+// @return
+//    室内粉尘传感器故障 室内甲醛传感器故障 室内CO2传感器故障 室内温度传感器故障 室内湿度传感器故障 室内漏水 室内漏气 (1有故障, 0无故障) 
+int[7] query_inner_alarm();
+
+// @return
+//    室内粉尘传感器故障 室内甲醛传感器故障 室内CO2传感器故障 室内温度传感器故障 室内湿度传感器故障 室内漏水 室内漏气 火警 新风阀故障 调风阀故障 排风阀故障 风量计故障 温度传感器故障 风量计通信故障 新风阀通信故障 调风阀通信故障 排风阀通信故障(1有故障, 0无故障) 
+int[17] query_inner_alarm_new();
+
+// 查询室外报警信息
+// @return
+//     1#阳光信号处理器故障 2#阳光信号处理器故障 3#阳光信号处理器故障 室外粉尘传感器故障 室外湿度传感器故障 室外温度传感器故障(1有故障, 1无故障)
+int[6] query_outside_alarm();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  时间同步
+void set_time(int year, int month, int day, int hour, int minute, int second); 
+
+// 设置火警
+// @param
+//    alarm  0-无火警   1-有火警
+void set_fire_alarm(int alarm);

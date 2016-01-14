@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+
+START=202
+start() {
+    lsmod | grep -q vizzini || insmod /lib/vizzini.ko
+    if [ -z `pidof outside_env` ] ;then
+        [ -e /usr/local/outside/outside_env ] && sleep 10 && /usr/local/outside/outside_env -d -c socket.lierda.com -p 9090 /dev/ttyUSB1
+    fi
+
+    if [ -z `pidof outside_daemon.sh` ] ;then
+        [ -e /usr/local/outside/outside_daemon.sh ] && /usr/local/outside/outside_daemon.sh&
+    fi
+}
+
+stop()
+{
+    kill -9 `pidof outside_daemon.sh` 2>/dev/null
+    kill -9 `pidof outside_env` 2>/dev/null
+}
